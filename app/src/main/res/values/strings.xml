@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Farmdrop</string>
+    <string name="empty_repo">Aucun repo disponible</string>
+    <string name="error_repo">Erreur pendant la récupération des repos</string>
+</resources>
