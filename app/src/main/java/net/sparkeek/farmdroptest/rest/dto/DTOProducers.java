@@ -7,14 +7,38 @@ import com.bluelinelabs.logansquare.annotation.JsonObject;
 
 @Generated("com.robohorse.robopojogenerator")
 @JsonObject
-public class DTOProducers{
+public class DTOProducers {
 
-	@JsonField(name ="DTOPagination")
-	private DTOPagination DTOPagination;
+	@JsonField(name ="short_description")
+	public String shortDescription;
 
-	@JsonField(name ="response")
-	private List<DTOResponseItem> response;
+	@JsonField(name ="images")
+	public List<DTOImagesItem> images;
 
-	@JsonField(name ="count")
-	private int count;
+	@JsonField(name ="via_wholesaler")
+	public boolean viaWholesaler;
+
+	@JsonField(name ="updated_at")
+	public String updatedAt;
+
+	@JsonField(name ="name")
+	public String name;
+
+	@JsonField(name ="created_at")
+	public String createdAt;
+
+	@JsonField(name ="description")
+	public String description;
+
+	@JsonField(name ="location")
+	public String location;
+
+	@JsonField(name ="id")
+	public int id;
+
+	@JsonField(name ="permalink")
+	public String permalink;
+
+	@JsonField(name ="wholesaler_name")
+	public String wholesalerName;
 }

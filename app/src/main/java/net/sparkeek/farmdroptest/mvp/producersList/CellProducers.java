@@ -1,4 +1,4 @@
-package net.sparkeek.farmdroptest.mvp.repoList;
+package net.sparkeek.farmdroptest.mvp.producersList;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,64 +10,57 @@ import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 
 import net.sparkeek.farmdroptest.ApplicationAndroidStarter;
+import net.sparkeek.farmdroptest.R;
+import net.sparkeek.farmdroptest.persistence.entities.ProducersEntity;
 
 import javax.inject.Inject;
 
 import autodagger.AutoInjector;
 import butterknife.Bind;
 import butterknife.ButterKnife;
-
-import net.sparkeek.farmdroptest.R;
-import net.sparkeek.farmdroptest.persistence.entities.RepoEntity;
 import io.nlopez.smartadapters.views.BindableFrameLayout;
 
+/**
+ * Created by Adrien on 22/11/2016.
+ */
 @AutoInjector(ApplicationAndroidStarter.class)
-public class
-CellRepo extends BindableFrameLayout<RepoEntity> {
-    //region Interactions
+public class CellProducers extends BindableFrameLayout<ProducersEntity> {
     public static final int ROW_PRESSED = 0;
-    //endregion
-
     //region Injected members
     @Inject
     Picasso mPicasso;
     //endregion
 
     //region Injected views
-    @Bind(R.id.CellRepo_TextView)
+    @Bind(R.id.CellProducers_TextView)
     TextView mTextView;
-    @Bind(R.id.CellRepo_ImageView_Avatar)
+    @Bind(R.id.CellProducers_ImageView_Avatar)
     ImageView mImageViewAvatar;
     //endregion
 
     //region Constructor
-    public CellRepo(@NonNull final Context poContext) {
+    public CellProducers(@NonNull final Context poContext) {
         super(poContext);
         ApplicationAndroidStarter.sharedApplication().componentApplication().inject(this);
     }
     //endregion
 
-    //region Overridden methods
     @Override
     public int getLayoutId() {
-        return R.layout.cell_repo;
+        return R.layout.cell_producers;
     }
 
     @Override
-    public void bind(@NonNull final RepoEntity poRepo) {
-        mTextView.setText(poRepo.getUrl());
+    public void bind(ProducersEntity poProducers) {
+        mTextView.setText(poProducers.getName());
 
-        final RequestCreator loRequest = mPicasso.load(poRepo.getAvatarUrl());
-        if (loRequest != null) {
-            loRequest
-                    .placeholder(net.sparkeek.farmdroptest.R.drawable.git_icon)
+        final RequestCreator lorequest = mPicasso.load(poProducers.getImages());
+        if(lorequest != null) {
+            lorequest.placeholder(R.drawable.git_icon)
                     .error(R.drawable.git_icon)
                     .into(mImageViewAvatar);
         }
-
-        setOnClickListener((final View poView) ->
-                notifyItemAction(ROW_PRESSED)
-        );
+        setOnClickListener((final View poView) -> notifyItemAction(ROW_PRESSED));
     }
 
     @Override
@@ -75,5 +68,4 @@ CellRepo extends BindableFrameLayout<RepoEntity> {
         super.onViewInflated();
         ButterKnife.bind(this);
     }
-    //endregion
 }

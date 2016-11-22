@@ -14,6 +14,10 @@ public class QueryFactory {
     public QueryGetRepos buildQueryGetRepos(@NonNull final String psUser, final boolean pbPullToRefresh) {
         return new QueryGetRepos(psUser, pbPullToRefresh);
     }
+
+    public QueryGetProducers buildQueryProducers(@NonNull final String page, final boolean pbPullToRefresh) {
+        return new QueryGetProducers(page, pbPullToRefresh);
+    }
     //endregion
 
     //region Start methods
@@ -24,6 +28,11 @@ public class QueryFactory {
 
     public void startQueryGetRepos(@NonNull final Context poContext, @NonNull final String psUser, final boolean pbPullToRefresh) {
         final QueryGetRepos loQuery = buildQueryGetRepos(psUser, pbPullToRefresh);
+        startQuery(poContext, loQuery);
+    }
+
+    public void startQueryGetProducers(@NonNull final Context poContext, @NonNull final String page, final boolean pbPullToRefresh) {
+        final QueryGetProducers loQuery = buildQueryProducers(page, pbPullToRefresh);
         startQuery(poContext, loQuery);
     }
     //endregion

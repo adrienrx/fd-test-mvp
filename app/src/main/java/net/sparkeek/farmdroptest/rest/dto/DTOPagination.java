@@ -9,20 +9,20 @@ import com.bluelinelabs.logansquare.annotation.JsonObject;
 public class DTOPagination {
 
 	@JsonField(name ="next")
-	private int next;
+	public int next;
 
 	@JsonField(name ="per_page")
-	private int perPage;
+	public int perPage;
 
 	@JsonField(name ="current")
-	private int current;
+	public int current;
 
 	@JsonField(name ="pages")
-	private int pages;
+	public int pages;
 
 	@JsonField(name ="previous")
-	private Object previous;
+	public Object previous;
 
 	@JsonField(name ="count")
-	private int count;
+	public int count;
 }

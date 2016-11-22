@@ -1,4 +1,4 @@
-package net.sparkeek.farmdroptest.mvp.repoList;
+package net.sparkeek.farmdroptest.mvp.producersList;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -10,84 +10,78 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.bluelinelabs.conductor.ControllerChangeHandler;
-import com.bluelinelabs.conductor.RouterTransaction;
 import com.hannesdorfmann.mosby.conductor.viewstate.MvpViewStateController;
 
 import net.sparkeek.farmdroptest.R;
-import net.sparkeek.farmdroptest.mvp.repoDetail.ControllerRepoDetail;
+import net.sparkeek.farmdroptest.mvp.repoList.RepoListMvp;
+import net.sparkeek.farmdroptest.persistence.entities.Producers;
+import net.sparkeek.farmdroptest.persistence.entities.ProducersEntity;
 
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-
-import net.sparkeek.farmdroptest.mvp.changehandlers.CircularRevealChangeHandlerCompat;
-import net.sparkeek.farmdroptest.persistence.entities.Repo;
-import net.sparkeek.farmdroptest.persistence.entities.RepoEntity;
-import hugo.weaving.DebugLog;
 import icepick.Icepick;
 import io.nlopez.smartadapters.SmartAdapter;
 import io.nlopez.smartadapters.utils.ViewEventListener;
 import pl.aprilapps.switcher.Switcher;
 
-public class ControllerRepoList
-        extends MvpViewStateController<RepoListMvp.View, RepoListMvp.Presenter, RepoListMvp.ViewState>
-        implements RepoListMvp.View, ViewEventListener<Repo>, SwipeRefreshLayout.OnRefreshListener {
+/**
+ * Created by Adrien on 22/11/2016.
+ */
 
-    //region Injected views
-    @Bind(R.id.ControllerRepoList_ProgressBar_Loading)
+public class ControllerProducersList
+        extends MvpViewStateController<ProducersListMvp.View, ProducersListMvp.Presenter, ProducersListMvp.ViewState>
+        implements ProducersListMvp.View, ViewEventListener<Producers>, SwipeRefreshLayout.OnRefreshListener{
+
+    //region inject views
+    @Bind(R.id.ControllerProducersList_ProgressBar_Loading)
     ProgressBar mProgressBarLoading;
-    @Bind(R.id.ControllerRepoList_RecyclerView)
+    @Bind(R.id.ControllerProducersList_RecyclerView)
     RecyclerView mRecyclerView;
-
-    @Bind(R.id.ControllerRepoList_SwipeRefreshLayout_Empty)
+    @Bind(R.id.ControllerProducersList_SwipeRefreshLayout_Empty)
     SwipeRefreshLayout mSwipeRefreshLayoutEmpty;
-    @Bind(R.id.ControllerRepoList_SwipeRefreshLayout_Error)
+    @Bind(R.id.ControllerProducersList_SwipeRefreshLayout_Error)
     SwipeRefreshLayout mSwipeRefreshLayoutError;
-    @Bind(R.id.ControllerRepoList_SwipeRefreshLayout_Content)
+    @Bind(R.id.ControllerProducersList_SwipeRefreshLayout_Content)
     SwipeRefreshLayout mSwipeRefreshLayoutContent;
     @Bind({
-            R.id.ControllerRepoList_SwipeRefreshLayout_Empty,
-            R.id.ControllerRepoList_SwipeRefreshLayout_Error,
-            R.id.ControllerRepoList_SwipeRefreshLayout_Content
+            R.id.ControllerProducersList_SwipeRefreshLayout_Empty,
+            R.id.ControllerProducersList_SwipeRefreshLayout_Error,
+            R.id.ControllerProducersList_SwipeRefreshLayout_Content
     })
     List<SwipeRefreshLayout> mSwipeRefreshLayouts;
     //endregion
 
-    //region Fields
     static final ButterKnife.Setter<SwipeRefreshLayout, SwipeRefreshLayout.OnRefreshListener> SET_LISTENER =
             (@NonNull final SwipeRefreshLayout poView, @NonNull final SwipeRefreshLayout.OnRefreshListener poListener, final int piIndex)
-                    ->
+                ->
                     poView.setOnRefreshListener(poListener);
 
     static final ButterKnife.Action<SwipeRefreshLayout> STOP_REFRESHING =
             (@NonNull final SwipeRefreshLayout poView, final int piIndex)
-                    ->
+            ->
                     poView.setRefreshing(false);
 
     private Switcher mSwitcher;
-    //endregion
 
-    //region Constructor
-    public ControllerRepoList() {
+    public ControllerProducersList(){
+
     }
-    //endregion
 
-    //region Lifecycle
     @NonNull
     @Override
-    protected View onCreateView(@NonNull final LayoutInflater poInflater, @NonNull final ViewGroup poContainer) {
-        final View loView = poInflater.inflate(R.layout.controller_repo_list, poContainer, false);
+    protected View onCreateView(@NonNull LayoutInflater poInflater, @NonNull ViewGroup poContainer) {
+        final View loView = poInflater.inflate(R.layout.controller_producers_list, poContainer, false);
         ButterKnife.bind(this, loView);
 
         ButterKnife.apply(mSwipeRefreshLayouts, SET_LISTENER, this);
 
         mSwitcher = new Switcher.Builder()
                 .withEmptyView(mSwipeRefreshLayoutEmpty)
+                .withContentView(mSwipeRefreshLayoutContent)
                 .withProgressView(mProgressBarLoading)
                 .withErrorView(mSwipeRefreshLayoutError)
-                .withContentView(mSwipeRefreshLayoutContent)
                 .build();
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -107,9 +101,7 @@ public class ControllerRepoList
     }
 
     @Override
-    protected void onAttach(@NonNull final View poView) {
-        super.onAttach(poView);
-    }
+    protected void onAttach(@NonNull final View poView) { super.onAttach(poView);}
 
     @Override
     protected void onDestroyView(final View poView) {
@@ -122,104 +114,80 @@ public class ControllerRepoList
         super.onSaveInstanceState(poOutState);
         Icepick.saveInstanceState(this, poOutState);
     }
-    //endregion
 
-    //region ViewEventListener
-    @DebugLog
+
     @Override
-    public void onViewEvent(final int piActionID, final Repo poRepo, final int piPosition, final View poView) {
-        if (piActionID == CellRepo.ROW_PRESSED) {
-            final ControllerRepoDetail loVC = new ControllerRepoDetail(poRepo.getBaseId());
-            final ControllerChangeHandler loChangeHandler = new CircularRevealChangeHandlerCompat(poView, mRecyclerView);
-            final RouterTransaction loTransaction = RouterTransaction.builder(loVC)
-                    .pushChangeHandler(loChangeHandler)
-                    .popChangeHandler(loChangeHandler)
-                    .build();
-            getRouter().pushController(loTransaction);
-        }
+    public void onViewEvent(final int piActionID, final Producers producers, final int poPosition, final View poView) {
+        //TODO : click to nav
     }
-    //endregion
 
-    //region MvpViewStateController
-    @DebugLog
+
+
     @NonNull
     @Override
-    public RepoListMvp.Presenter createPresenter() {
-        return new PresenterRepoList();
-    }
-
-    @DebugLog
-    @NonNull
-    @Override
-    public RepoListMvp.ViewState createViewState() {
-        return new RepoListMvp.ViewState();
+    public ProducersListMvp.ViewState createViewState() {
+        return new ProducersListMvp.ViewState();
     }
 
     @Override
-    public void onViewStateInstanceRestored(final boolean pbInstanceStateRetained) {
+    public void onViewStateInstanceRestored(boolean instanceStateRetained) {
+
     }
 
-    @DebugLog
     @Override
     public void onNewViewStateInstance() {
         loadData(false);
     }
-    //endregion
 
-    //region ViewRepoList
-    @DebugLog
+    @NonNull
+    @Override
+    public ProducersListMvp.Presenter createPresenter() {
+        return new PresenterProducersList();
+    }
+
     @Override
     public void showEmpty() {
         ButterKnife.apply(mSwipeRefreshLayouts, STOP_REFRESHING);
         mSwitcher.showEmptyView();
     }
-    //endregion
 
-    //region MvpLceView
-    @DebugLog
     @Override
     public void showLoading(final boolean pbPullToRefresh) {
-        if (!pbPullToRefresh) {
+        if(!pbPullToRefresh) {
             mSwitcher.showProgressView();
         }
     }
 
-    @DebugLog
     @Override
     public void showContent() {
         ButterKnife.apply(mSwipeRefreshLayouts, STOP_REFRESHING);
         mSwitcher.showContentView();
     }
 
-    @DebugLog
     @Override
-    public void showError(final Throwable poThrowable, final boolean pbPullToRefresh) {
+    public void showError(Throwable throwable, boolean b) {
         ButterKnife.apply(mSwipeRefreshLayouts, STOP_REFRESHING);
         mSwitcher.showErrorView();
     }
 
-    @DebugLog
     @Override
-    public void setData(final RepoListMvp.Model poData) {
+    public void setData(ProducersListMvp.Model poData) {
         viewState.data = poData;
 
-        SmartAdapter.items(poData.repos)
-                .map(RepoEntity.class, CellRepo.class)
-                .listener(ControllerRepoList.this)
+        SmartAdapter.items(poData.producers)
+                .map(ProducersEntity.class, CellProducers.class)
+                .listener(ControllerProducersList.this)
                 .into(mRecyclerView);
     }
 
-    @DebugLog
     @Override
     public void loadData(final boolean pbPullToRefresh) {
-        getPresenter().loadRepos(pbPullToRefresh);
+        getPresenter().loadProducers(pbPullToRefresh);
     }
-    //endregion
 
-    //region SwipeRefreshLayout.OnRefreshListener
+
     @Override
     public void onRefresh() {
         loadData(true);
     }
-    //endregion
 }
