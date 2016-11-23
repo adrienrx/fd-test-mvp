@@ -10,5 +10,5 @@ import retrofit2.http.Path;
 
 public interface FarmDropService {
     @GET("/{page}/producers")
-    Call<List<DTOProducersResponseItem>> listProducers(@Path("page") final String psPage);
+    Call<DTOProducersResponseItem> listProducers(@Path("page") final String psPage);
 }

@@ -2,6 +2,7 @@ package net.sparkeek.farmdroptest.mvp.producersList;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
 
@@ -133,7 +134,7 @@ public class PresenterProducersList extends MvpBasePresenter<ProducersListMvp.Vi
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEventQueryGetProducers(@NonNull final QueryGetProducers.EventQueryGetProducersFinish poEvent) {
         if(poEvent.success){
-            //getProducers
+            getProducers(poEvent.pullToRefresh);
         } else {
             final ProducersListMvp.View loView = getView();
             if(isViewAttached() && loView != null){

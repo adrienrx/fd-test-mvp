@@ -38,7 +38,7 @@ public class QueryGetProducers extends AbstractQuery{
     //region fields
     public final boolean pullToRefresh;
     public final String page;
-    transient public List<DTOProducersResponseItem> results;
+    transient public DTOProducersResponseItem results;
     //endregion
 
     //region constructor > super
@@ -59,13 +59,12 @@ public class QueryGetProducers extends AbstractQuery{
     protected void execute() throws Exception {
         inject();
 
-        final Call<List<DTOProducersResponseItem>> loCall = farmDropService.listProducers(page);
-        final Response<List<DTOProducersResponseItem>> loExecute = loCall.execute();
+        final Call<DTOProducersResponseItem> loCall = farmDropService.listProducers(page);
+        final Response<DTOProducersResponseItem> loExecute = loCall.execute();
         results = loExecute.body();
 
         final ArrayList<ProducersEntity> lloEntities = new ArrayList<>();
-        for(final DTOProducersResponseItem loDTOProducersResponseItem : results){
-            for(final DTOProducers loDTOProducers : loDTOProducersResponseItem.response){
+            for(final DTOProducers loDTOProducers : results.response){
                 final ProducersEntity loProducers = new ProducersEntity();
                 loProducers.setName(loDTOProducers.name);
                 loProducers.setDescription(loDTOProducers.description);
@@ -73,7 +72,7 @@ public class QueryGetProducers extends AbstractQuery{
                 loProducers.setImages(loDTOProducers.images.get(0).path);
                 lloEntities.add(loProducers);
             }
-        }
+
         dataStore.insert(lloEntities).toBlocking().value();
     }
 
@@ -91,8 +90,8 @@ public class QueryGetProducers extends AbstractQuery{
 
     public static final class EventQueryGetProducersFinish extends AbstractEventQueryDidFinish<QueryGetProducers> {
         public final boolean pullToRefresh;
-        public final List<DTOProducersResponseItem> results;
-        public EventQueryGetProducersFinish(final QueryGetProducers poQuery, final boolean pbSucess, final ErrorType poErrorType, final Throwable poThrowable, final boolean pbPullToRefresh, final List<DTOProducersResponseItem> ploResults) {
+        public final DTOProducersResponseItem results;
+        public EventQueryGetProducersFinish(final QueryGetProducers poQuery, final boolean pbSucess, final ErrorType poErrorType, final Throwable poThrowable, final boolean pbPullToRefresh, final DTOProducersResponseItem ploResults) {
             super(poQuery, pbSucess, poErrorType, poThrowable);
             pullToRefresh = pbPullToRefresh;
             results = ploResults;

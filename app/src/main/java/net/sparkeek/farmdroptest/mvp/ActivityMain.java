@@ -18,6 +18,7 @@ import butterknife.ButterKnife;
 
 import net.sparkeek.farmdroptest.IEnvironment;
 import net.sparkeek.farmdroptest.R;
+import net.sparkeek.farmdroptest.mvp.producersList.ControllerProducersList;
 import net.sparkeek.farmdroptest.mvp.repoList.ControllerRepoList;
 import io.palaima.debugdrawer.DebugDrawer;
 import io.palaima.debugdrawer.commons.BuildModule;
@@ -73,7 +74,7 @@ public class ActivityMain extends AppCompatActivity {
 
         mRouter = Conductor.attachRouter(this, mViewGroupContainer, poSavedInstanceState);
         if (!mRouter.hasRootController()) {
-            mRouter.setRoot(new ControllerRepoList());
+            mRouter.setRoot(new ControllerProducersList());
         }
     }
 

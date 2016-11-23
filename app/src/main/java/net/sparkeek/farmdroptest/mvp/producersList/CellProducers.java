@@ -57,6 +57,7 @@ public class CellProducers extends BindableFrameLayout<ProducersEntity> {
         final RequestCreator lorequest = mPicasso.load(poProducers.getImages());
         if(lorequest != null) {
             lorequest.placeholder(R.drawable.git_icon)
+                    .resize(100,100)
                     .error(R.drawable.git_icon)
                     .into(mImageViewAvatar);
         }
