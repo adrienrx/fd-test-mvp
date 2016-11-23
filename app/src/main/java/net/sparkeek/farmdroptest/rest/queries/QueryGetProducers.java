@@ -63,6 +63,10 @@ public class QueryGetProducers extends AbstractQuery{
         final Response<DTOProducersResponseItem> loExecute = loCall.execute();
         results = loExecute.body();
 
+        //TODO : Implement HASH verification
+        final int liDeleted = dataStore.delete(ProducersEntity.class).get().value();
+
+
         final ArrayList<ProducersEntity> lloEntities = new ArrayList<>();
             for(final DTOProducers loDTOProducers : results.response){
                 final ProducersEntity loProducers = new ProducersEntity();
