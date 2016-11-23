@@ -34,6 +34,8 @@ public class CellProducers extends BindableFrameLayout<ProducersEntity> {
     //region Injected views
     @Bind(R.id.CellProducers_TextView)
     TextView mTextView;
+    @Bind(R.id.CellProducers_Description_TextView)
+    TextView mTextViewDescription;
     @Bind(R.id.CellProducers_ImageView_Avatar)
     ImageView mImageViewAvatar;
     //endregion
@@ -53,7 +55,7 @@ public class CellProducers extends BindableFrameLayout<ProducersEntity> {
     @Override
     public void bind(ProducersEntity poProducers) {
         mTextView.setText(poProducers.getName());
-
+        mTextViewDescription.setText(poProducers.getShort_Description());
         final RequestCreator lorequest = mPicasso.load(poProducers.getImages());
         if(lorequest != null) {
             lorequest.placeholder(R.drawable.git_icon)
