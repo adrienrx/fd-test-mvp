@@ -10,10 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
+import com.bluelinelabs.conductor.ControllerChangeHandler;
+import com.bluelinelabs.conductor.RouterTransaction;
 import com.hannesdorfmann.mosby.conductor.viewstate.MvpViewStateController;
 
 import net.sparkeek.farmdroptest.R;
-import net.sparkeek.farmdroptest.mvp.repoList.RepoListMvp;
+import net.sparkeek.farmdroptest.mvp.changehandlers.CircularRevealChangeHandlerCompat;
+import net.sparkeek.farmdroptest.mvp.producersDetail.ControllerProducerDetail;
 import net.sparkeek.farmdroptest.persistence.entities.Producers;
 import net.sparkeek.farmdroptest.persistence.entities.ProducersEntity;
 
@@ -118,7 +121,15 @@ public class ControllerProducersList
 
     @Override
     public void onViewEvent(final int piActionID, final Producers producers, final int poPosition, final View poView) {
-        //TODO : click to nav
+        if (piActionID == CellProducers.ROW_PRESSED) {
+            final ControllerProducerDetail loVC = new ControllerProducerDetail(producers.getBaseId());
+            final ControllerChangeHandler loChangeHandler = new CircularRevealChangeHandlerCompat(poView, mRecyclerView);
+            final RouterTransaction loTransaction = RouterTransaction.builder(loVC)
+                    .pushChangeHandler(loChangeHandler)
+                    .popChangeHandler(loChangeHandler)
+                    .build();
+            getRouter().pushController(loTransaction);
+        }
     }
 
 

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/ControllerProducerDetail_TextView_Empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/empty_repo"/>
+
+    <TextView
+        android:id="@+id/ControllerProducerDetail_TextView_Error"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/error_repo"/>
+
+    <ProgressBar
+        android:id="@+id/ControllerProducerDetail_ProgressBar_Loading"
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"/>
+
+    <LinearLayout
+        android:id="@+id/ControllerProducerDetail_ContentView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/ControllerProducerDetail_ImageView"
+            android:layout_width="50dip"
+            android:layout_height="50dip"
+
+            ></ImageView>
+
+        <TextView
+            android:id="@+id/ControllerProducerDetail_TextView_Description"
+            style="?android:attr/textAppearanceMedium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:textIsSelectable="true"/>
+
+        <TextView
+            android:id="@+id/ControllerProducerDetail_TextView_Url"
+            style="?android:attr/textAppearanceSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:textIsSelectable="true"/>
+    </LinearLayout>
+</FrameLayout>

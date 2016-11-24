@@ -7,7 +7,6 @@ import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import com.hannesdorfmann.mosby.mvp.lce.MvpLceView;
 import com.hannesdorfmann.mosby.mvp.viewstate.RestorableViewState;
 
-import net.sparkeek.farmdroptest.mvp.repoList.RepoListMvp;
 import net.sparkeek.farmdroptest.persistence.entities.ProducersEntity;
 
 import java.io.Serializable;

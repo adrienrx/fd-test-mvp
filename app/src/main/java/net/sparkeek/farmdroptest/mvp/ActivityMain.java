@@ -19,7 +19,6 @@ import butterknife.ButterKnife;
 import net.sparkeek.farmdroptest.IEnvironment;
 import net.sparkeek.farmdroptest.R;
 import net.sparkeek.farmdroptest.mvp.producersList.ControllerProducersList;
-import net.sparkeek.farmdroptest.mvp.repoList.ControllerRepoList;
 import io.palaima.debugdrawer.DebugDrawer;
 import io.palaima.debugdrawer.commons.BuildModule;
 import io.palaima.debugdrawer.commons.DeviceModule;
