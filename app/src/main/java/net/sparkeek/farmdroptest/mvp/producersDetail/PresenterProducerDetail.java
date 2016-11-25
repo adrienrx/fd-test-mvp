@@ -1,10 +1,15 @@
 package net.sparkeek.farmdroptest.mvp.producersDetail;
 
+import android.graphics.Bitmap;
+
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
+import com.squareup.picasso.Picasso;
 
 import net.sparkeek.farmdroptest.ApplicationAndroidStarter;
 import net.sparkeek.farmdroptest.persistence.entities.Producers;
 import net.sparkeek.farmdroptest.persistence.entities.ProducersEntity;
+
+import java.io.IOException;
 
 import javax.inject.Inject;
 
@@ -23,6 +28,8 @@ public class PresenterProducerDetail extends MvpBasePresenter<ProducerDetailMvp.
     //region Injected Fields
     @Inject
     SingleEntityStore<Persistable> dataStore;
+    @Inject
+    Picasso mPicasso;
     //endregion
 
     //region fields

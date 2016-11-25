@@ -1,5 +1,7 @@
 package net.sparkeek.farmdroptest.mvp.producersDetail;
 
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.media.Image;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
@@ -8,9 +10,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.conductor.viewstate.MvpViewStateController;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.RequestCreator;
 
@@ -33,12 +38,16 @@ public class ControllerProducerDetail
         extends MvpViewStateController<ProducerDetailMvp.View, PresenterProducerDetail, ProducerDetailMvp.ViewState>
         implements ProducerDetailMvp.View{
 
+    Bitmap mProducerBitmap;
+
     @Inject
-    Picasso mPicasso;
+    Context mContext;
 
     //region Injected Views
     @Bind(R.id.ControllerProducerDetail_TextView_Description)
     TextView mTextViewDescription;
+    @Bind(R.id.ControllerProducerDetail_Name)
+    TextView mTextViewName;
     @Bind(R.id.ControllerProducerDetail_TextView_Url)
     TextView mTextViewUrl;
     @Bind(R.id.ControllerProducerDetail_TextView_Empty)
@@ -49,8 +58,10 @@ public class ControllerProducerDetail
     ProgressBar mProgressBarLoading;
     @Bind(R.id.ControllerProducerDetail_ImageView)
     ImageView mImageViewProducer;
+    @Bind(R.id.ControllerProducerDetail_Location)
+    TextView mTextViewLocation;
     @Bind(R.id.ControllerProducerDetail_ContentView)
-    LinearLayout mContentView;
+    RelativeLayout mContentView;
     //endregion
 
     private final long mProducerId;
@@ -124,6 +135,7 @@ public class ControllerProducerDetail
 
     @Override
     public void setData(ProducerDetailMvp.Model data) {
+
         configureViewWithProducer(data.producer);
     }
 
@@ -139,9 +151,15 @@ public class ControllerProducerDetail
     //region specific
     @DebugLog
     private void configureViewWithProducer(@NonNull final Producers poProducer){
-        mTextViewDescription.setText(poProducer.getImages());
-
-
+        mTextViewName.setText(poProducer.getName());
+        mTextViewDescription.setText(poProducer.getDescription());
+        if(poProducer.getLocation() != null){
+            mTextViewLocation.setText(poProducer.getLocation());
+        }
+        Picasso.with(mContext)
+                .load(poProducer.getImages())
+                .resize(1024, 768)
+                .into(mImageViewProducer);
     }
     //endregion
 }

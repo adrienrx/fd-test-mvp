@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Farmdrop</string>
-    <string name="empty_repo">Aucun repo disponible</string>
-    <string name="error_repo">Erreur pendant la récupération des repos</string>
+    <string name="empty_repo">Oh Sorry, No farmers was found</string>
+    <string name="error_repo">Crap ! There is a problem between the rocket and the control</string>
 </resources>

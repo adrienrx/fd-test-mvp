@@ -10,7 +10,6 @@ import com.squareup.picasso.Picasso;
 
 import net.sparkeek.farmdroptest.IEnvironment;
 import net.sparkeek.farmdroptest.rest.FarmDropService;
-import net.sparkeek.farmdroptest.rest.GitHubService;
 import net.sparkeek.farmdroptest.rest.errorHandling.ErrorHandlingExecutorCallAdapterFactory;
 import net.sparkeek.farmdroptest.rest.queries.QueryFactory;
 
@@ -36,17 +35,6 @@ public class ModuleRest {
                 .build();
     }
 
-    @Provides
-    @Singleton
-    public GitHubService provideGithubService(@NonNull final OkHttpClient poOkHttpClient) {
-        final Retrofit loRetrofit = new Retrofit.Builder()
-                .baseUrl("https://api.github.com")
-                .client(poOkHttpClient)
-                .addConverterFactory(LoganSquareConverterFactory.create())
-                .addCallAdapterFactory(new ErrorHandlingExecutorCallAdapterFactory(new ErrorHandlingExecutorCallAdapterFactory.MainThreadExecutor()))
-                .build();
-        return loRetrofit.create(GitHubService.class);
-    }
 
     @Provides
     @Singleton
@@ -87,8 +75,6 @@ public class ModuleRest {
     @Singleton
     public Picasso providePicasso(@NonNull final Context poContext) {
         final Picasso loPicasso = Picasso.with(poContext);
-        loPicasso.setIndicatorsEnabled(true);
-        loPicasso.setLoggingEnabled(true);
         return loPicasso;
     }
 

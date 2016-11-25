@@ -73,6 +73,7 @@ public class QueryGetProducers extends AbstractQuery{
                 loProducers.setName(loDTOProducers.name);
                 loProducers.setDescription(loDTOProducers.description);
                 loProducers.setShort_Description(loDTOProducers.shortDescription);
+                loProducers.setLocation(loDTOProducers.location);
                 loProducers.setImages(loDTOProducers.images.get(0).path);
                 lloEntities.add(loProducers);
             }

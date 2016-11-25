@@ -1,6 +1,7 @@
 package net.sparkeek.farmdroptest.mvp.producersDetail;
 
 import android.app.backup.RestoreObserver;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
@@ -24,7 +25,6 @@ public interface ProducerDetailMvp {
     //region Model
     final class Model implements Serializable {
         public final Producers producer;
-
         public Model(final Producers poProducer) {
             producer = poProducer;
         }

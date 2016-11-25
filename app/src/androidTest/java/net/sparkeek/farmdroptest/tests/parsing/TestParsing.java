@@ -6,8 +6,6 @@ import android.test.suitebuilder.annotation.LargeTest;
 import com.bluelinelabs.logansquare.LoganSquare;
 import com.github.polok.localify.LocalifyClient;
 
-import net.sparkeek.farmdroptest.rest.dto.DTORepo;
-
 import org.frutilla.FrutillaTestRunner;
 import org.frutilla.annotations.Frutilla;
 import org.junit.Before;
@@ -22,7 +20,7 @@ import static com.google.common.truth.Truth.assertThat;
 @RunWith(FrutillaTestRunner.class)
 @LargeTest
 public class TestParsing {
-
+    /*
     //region Fields
     private LocalifyClient mLocalifyClient;
     //endregion
@@ -89,4 +87,6 @@ public class TestParsing {
         }
     }
     //endregion
+
+    */
 }

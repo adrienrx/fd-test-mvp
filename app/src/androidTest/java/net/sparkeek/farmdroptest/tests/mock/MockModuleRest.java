@@ -7,7 +7,7 @@ import com.github.aurae.retrofit2.LoganSquareConverterFactory;
 import com.squareup.picasso.Picasso;
 
 import net.sparkeek.farmdroptest.di.modules.ModuleRest;
-import net.sparkeek.farmdroptest.rest.GitHubService;
+import net.sparkeek.farmdroptest.rest.FarmDropService;
 import net.sparkeek.farmdroptest.rest.errorHandling.ErrorHandlingExecutorCallAdapterFactory;
 
 import dagger.Module;
@@ -33,15 +33,16 @@ public class MockModuleRest extends ModuleRest {
     //endregion
 
     //region Modules
+
     @Override
-    public GitHubService provideGithubService(@NonNull final OkHttpClient poOkHttpClient) {
+    public FarmDropService provideFarmDropService(@NonNull final OkHttpClient poOkHttpClient) {
         final Retrofit loRetrofit = new Retrofit.Builder()
                 .baseUrl(mMockWebServer.url("/").toString())
                 .client(poOkHttpClient)
                 .addConverterFactory(LoganSquareConverterFactory.create())
                 .addCallAdapterFactory(new ErrorHandlingExecutorCallAdapterFactory(new ErrorHandlingExecutorCallAdapterFactory.MainThreadExecutor()))
                 .build();
-        return loRetrofit.create(GitHubService.class);
+        return loRetrofit.create(FarmDropService.class);
     }
 
     @Override
