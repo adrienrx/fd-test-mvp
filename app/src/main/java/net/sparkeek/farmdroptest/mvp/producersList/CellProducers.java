@@ -55,7 +55,13 @@ public class CellProducers extends BindableFrameLayout<ProducersEntity> {
     @Override
     public void bind(ProducersEntity poProducers) {
         mTextView.setText(poProducers.getName());
-        mTextViewDescription.setText(poProducers.getShort_Description());
+
+        if(poProducers.getShort_Description().isEmpty()) {
+            mTextViewDescription.setText(poProducers.getDescription());
+        } else {
+            mTextViewDescription.setText(poProducers.getShort_Description());
+        }
+
         final RequestCreator lorequest = mPicasso.load(poProducers.getImages());
         if(lorequest != null) {
             lorequest.placeholder(R.drawable.git_icon)
