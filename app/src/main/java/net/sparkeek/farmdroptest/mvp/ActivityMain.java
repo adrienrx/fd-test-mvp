@@ -65,8 +65,6 @@ public class ActivityMain extends AppCompatActivity {
 
         ButterKnife.bind(this);
 
-        final int liDeleted = dataStore.delete(ProducersEntity.class).get().value();
-
         if (mEnvironment.isDebugDrawerEnabled()) {
             mDebugDrawer = new DebugDrawer.Builder(this).modules(
                     new FpsModule(Takt.stock(getApplication())),

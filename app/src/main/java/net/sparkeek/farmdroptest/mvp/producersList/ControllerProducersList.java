@@ -29,6 +29,7 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import icepick.Icepick;
 import io.nlopez.smartadapters.SmartAdapter;
+import io.nlopez.smartadapters.adapters.RecyclerMultiAdapter;
 import io.nlopez.smartadapters.utils.ViewEventListener;
 import pl.aprilapps.switcher.Switcher;
 
@@ -41,7 +42,7 @@ public class ControllerProducersList
         implements ProducersListMvp.View, ViewEventListener<Producers>, SwipeRefreshLayout.OnRefreshListener {
 
     public int mTotalItems = 10;
-
+    public RecyclerMultiAdapter mRecyclerMultiAdapter;
     //region inject views
     @Bind(R.id.ControllerProducersList_ProgressBar_Loading)
     ProgressBar mProgressBarLoading;
@@ -198,11 +199,14 @@ public class ControllerProducersList
     @Override
     public void setData(ProducersListMvp.Model poData) {
         viewState.data = poData;
-
-        SmartAdapter.items(poData.producers)
-                .map(ProducersEntity.class, CellProducers.class)
-                .listener(ControllerProducersList.this)
-                .into(mRecyclerView);
+        if(mRecyclerView.getAdapter() == null) {
+            mRecyclerMultiAdapter = SmartAdapter.items(poData.producers)
+                    .map(ProducersEntity.class, CellProducers.class)
+                    .listener(ControllerProducersList.this)
+                    .into(mRecyclerView);
+        }else{
+            mRecyclerMultiAdapter.addItems(poData.producers);
+        }
     }
 
     @Override
@@ -216,11 +220,8 @@ public class ControllerProducersList
     }
 
     public void loadNextDataFromApi(int offset, int totalItemCount){
-
         getPresenter().loadProducers(true, "2", String.valueOf(offset + 1));
-        mRecyclerView.getAdapter().notifyItemRangeInserted(mTotalItems, mTotalItems + totalItemCount);
 
-        mTotalItems = mTotalItems + totalItemCount;
     }
 
 }

@@ -89,6 +89,7 @@ public class PresenterProducersList extends MvpBasePresenter<ProducersListMvp.Vi
             return;
         }
 
+
         final ArrayList<ProducersEntity> lloProducers = new ArrayList<>();
         mSubscriptionGetProducers = dataStore.select(ProducersEntity.class)
                 .get()
