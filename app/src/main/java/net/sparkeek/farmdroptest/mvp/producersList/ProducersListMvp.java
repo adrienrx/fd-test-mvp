@@ -2,6 +2,7 @@ package net.sparkeek.farmdroptest.mvp.producersList;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 
 import com.hannesdorfmann.mosby.mvp.MvpPresenter;
 import com.hannesdorfmann.mosby.mvp.lce.MvpLceView;
@@ -39,7 +40,7 @@ public interface ProducersListMvp {
 
     //region Presenter
     interface Presenter extends MvpPresenter<View>{
-        void loadProducers(final boolean pbPullToRefresh);
+        void loadProducers(final boolean pbPullToRefresh, final String fullOrNot, final String pbPage);
     }
     //endregion
 
@@ -82,11 +83,6 @@ public interface ProducersListMvp {
             return this;
         }
         //endregion
-
     }
     //endregion
-
-
-
-
 }

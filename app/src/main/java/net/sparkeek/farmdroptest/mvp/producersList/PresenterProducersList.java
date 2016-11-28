@@ -2,6 +2,7 @@ package net.sparkeek.farmdroptest.mvp.producersList;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.hannesdorfmann.mosby.mvp.MvpBasePresenter;
@@ -74,8 +75,8 @@ public class PresenterProducersList extends MvpBasePresenter<ProducersListMvp.Vi
 
     //region ProducersListMvp.Presenter
     @Override
-    public void loadProducers(boolean pbPullToRefresh) {
-        startQueryGetProducers(pbPullToRefresh);
+    public void loadProducers(boolean pbPullToRefresh, String fullOrNot, String pbPage) {
+        startQueryGetProducers(pbPullToRefresh,fullOrNot, pbPage);
     }
     //endregion
 
@@ -120,12 +121,12 @@ public class PresenterProducersList extends MvpBasePresenter<ProducersListMvp.Vi
     }
 
     //region network job
-    private void startQueryGetProducers(final boolean pbPullToRefresh){
+    private void startQueryGetProducers(final boolean pbPullToRefresh, final String fullOrNot, final String pbPage){
         final ProducersListMvp.View loView = getView();
         if(isViewAttached() && loView != null) {
             loView.showLoading(pbPullToRefresh);
         }
-        queryFactory.startQueryGetProducers(context, "2", pbPullToRefresh);
+        queryFactory.startQueryGetProducers(context,fullOrNot, pbPage, pbPullToRefresh);
     }
     //endregion
 

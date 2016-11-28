@@ -19,6 +19,8 @@ import butterknife.ButterKnife;
 import net.sparkeek.farmdroptest.IEnvironment;
 import net.sparkeek.farmdroptest.R;
 import net.sparkeek.farmdroptest.mvp.producersList.ControllerProducersList;
+import net.sparkeek.farmdroptest.persistence.entities.ProducersEntity;
+
 import io.palaima.debugdrawer.DebugDrawer;
 import io.palaima.debugdrawer.commons.BuildModule;
 import io.palaima.debugdrawer.commons.DeviceModule;
@@ -27,6 +29,8 @@ import io.palaima.debugdrawer.commons.SettingsModule;
 import io.palaima.debugdrawer.fps.FpsModule;
 import io.palaima.debugdrawer.picasso.PicassoModule;
 import io.palaima.debugdrawer.scalpel.ScalpelModule;
+import io.requery.Persistable;
+import io.requery.rx.SingleEntityStore;
 import jp.wasabeef.takt.Takt;
 
 @AutoInjector(ApplicationAndroidStarter.class)
@@ -47,6 +51,8 @@ public class ActivityMain extends AppCompatActivity {
     Picasso mPicasso;
     @Inject
     IEnvironment mEnvironment;
+    @Inject
+    transient SingleEntityStore<Persistable> dataStore;
     //endregion
 
     //region Lifecycle
@@ -58,6 +64,8 @@ public class ActivityMain extends AppCompatActivity {
         ApplicationAndroidStarter.sharedApplication().componentApplication().inject(this);
 
         ButterKnife.bind(this);
+
+        final int liDeleted = dataStore.delete(ProducersEntity.class).get().value();
 
         if (mEnvironment.isDebugDrawerEnabled()) {
             mDebugDrawer = new DebugDrawer.Builder(this).modules(

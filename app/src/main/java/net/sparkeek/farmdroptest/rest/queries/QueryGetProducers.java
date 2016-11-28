@@ -38,14 +38,16 @@ public class QueryGetProducers extends AbstractQuery{
     //region fields
     public final boolean pullToRefresh;
     public final String page;
+    public final String fullOrNot;
     transient public DTOProducersResponseItem results;
     //endregion
 
     //region constructor > super
-    protected QueryGetProducers(final String psPage, final boolean pbPullToRefresh) {
+    protected QueryGetProducers(final String psFullOrNot, final String psPage, final boolean pbPullToRefresh) {
         super(Priority.MEDIUM);
         page = psPage;
         pullToRefresh = pbPullToRefresh;
+        fullOrNot = psFullOrNot;
     }
     //endregion
 
@@ -59,12 +61,11 @@ public class QueryGetProducers extends AbstractQuery{
     protected void execute() throws Exception {
         inject();
 
-        final Call<DTOProducersResponseItem> loCall = farmDropService.listProducers(page);
+        final Call<DTOProducersResponseItem> loCall = farmDropService.listProducers(fullOrNot, page);
         final Response<DTOProducersResponseItem> loExecute = loCall.execute();
         results = loExecute.body();
 
         //TODO : Implement HASH verification
-        final int liDeleted = dataStore.delete(ProducersEntity.class).get().value();
 
 
         final ArrayList<ProducersEntity> lloEntities = new ArrayList<>();

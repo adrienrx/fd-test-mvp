@@ -8,7 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.bluelinelabs.conductor.ControllerChangeHandler;
 import com.bluelinelabs.conductor.RouterTransaction;
@@ -16,6 +18,7 @@ import com.hannesdorfmann.mosby.conductor.viewstate.MvpViewStateController;
 
 import net.sparkeek.farmdroptest.R;
 import net.sparkeek.farmdroptest.mvp.changehandlers.CircularRevealChangeHandlerCompat;
+import net.sparkeek.farmdroptest.mvp.pagination.EndlessRecyclerViewScrollListener;
 import net.sparkeek.farmdroptest.mvp.producersDetail.ControllerProducerDetail;
 import net.sparkeek.farmdroptest.persistence.entities.Producers;
 import net.sparkeek.farmdroptest.persistence.entities.ProducersEntity;
@@ -35,7 +38,9 @@ import pl.aprilapps.switcher.Switcher;
 
 public class ControllerProducersList
         extends MvpViewStateController<ProducersListMvp.View, ProducersListMvp.Presenter, ProducersListMvp.ViewState>
-        implements ProducersListMvp.View, ViewEventListener<Producers>, SwipeRefreshLayout.OnRefreshListener{
+        implements ProducersListMvp.View, ViewEventListener<Producers>, SwipeRefreshLayout.OnRefreshListener {
+
+    public int mTotalItems = 10;
 
     //region inject views
     @Bind(R.id.ControllerProducersList_ProgressBar_Loading)
@@ -67,9 +72,8 @@ public class ControllerProducersList
                     poView.setRefreshing(false);
 
     private Switcher mSwitcher;
-
+    private EndlessRecyclerViewScrollListener scrollListener;
     public ControllerProducersList(){
-
     }
 
     @NonNull
@@ -79,6 +83,7 @@ public class ControllerProducersList
         ButterKnife.bind(this, loView);
 
         ButterKnife.apply(mSwipeRefreshLayouts, SET_LISTENER, this);
+        LinearLayoutManager mLinearLayoutManager = new LinearLayoutManager(getActivity());
 
         mSwitcher = new Switcher.Builder()
                 .withEmptyView(mSwipeRefreshLayoutEmpty)
@@ -87,7 +92,16 @@ public class ControllerProducersList
                 .withErrorView(mSwipeRefreshLayoutError)
                 .build();
 
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        scrollListener = new EndlessRecyclerViewScrollListener(mLinearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                loadNextDataFromApi(page, totalItemsCount);
+            }
+
+        };
+
+        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRecyclerView.addOnScrollListener(scrollListener);
         return loView;
     }
 
@@ -193,12 +207,20 @@ public class ControllerProducersList
 
     @Override
     public void loadData(final boolean pbPullToRefresh) {
-        getPresenter().loadProducers(pbPullToRefresh);
+        getPresenter().loadProducers(pbPullToRefresh, "2", null);
     }
-
 
     @Override
     public void onRefresh() {
         loadData(true);
     }
+
+    public void loadNextDataFromApi(int offset, int totalItemCount){
+
+        getPresenter().loadProducers(true, "2", String.valueOf(offset + 1));
+        mRecyclerView.getAdapter().notifyItemRangeInserted(mTotalItems, mTotalItems + totalItemCount);
+
+        mTotalItems = mTotalItems + totalItemCount;
+    }
+
 }

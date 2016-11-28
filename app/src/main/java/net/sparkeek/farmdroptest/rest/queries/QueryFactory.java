@@ -12,8 +12,8 @@ import net.sparkeek.farmdroptest.services.ServiceQueryExecutorIntentBuilder;
 public class QueryFactory {
     //region Build methods
 
-    public QueryGetProducers buildQueryProducers(@NonNull final String page, final boolean pbPullToRefresh) {
-        return new QueryGetProducers(page, pbPullToRefresh);
+    public QueryGetProducers buildQueryProducers(@NonNull final String fullOrNot, final String page,@NonNull final boolean pbPullToRefresh) {
+        return new QueryGetProducers(fullOrNot, page, pbPullToRefresh);
     }
     //endregion
 
@@ -24,8 +24,8 @@ public class QueryFactory {
     }
 
 
-    public void startQueryGetProducers(@NonNull final Context poContext, @NonNull final String page, final boolean pbPullToRefresh) {
-        final QueryGetProducers loQuery = buildQueryProducers(page, pbPullToRefresh);
+    public void startQueryGetProducers(@NonNull final Context poContext,@NonNull final String fullOrNot,  @NonNull final String page, final boolean pbPullToRefresh) {
+        final QueryGetProducers loQuery = buildQueryProducers(fullOrNot, page, pbPullToRefresh);
         startQuery(poContext, loQuery);
     }
     //endregion
